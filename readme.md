@@ -6,16 +6,11 @@ This project serves as a template for developers to quickly set up a TypeScript-
 
 ### Key Files and Directories
 
-- **.vscode/**: Contains Visual Studio Code configurations for debugging.
-  - `launch.json`: Configuration for attaching to a Model-Driven App in Edge.
-
-- **eslint.config.mjs**: Configuration for ESLint, including TypeScript and React plugins.
-
 - **initScirpt/**: Contains the initialization script to set up the project.
   - `init-project.sh`: Script to initialize the project, install dependencies, and set up configurations.
 
-- **package.json**: Defines project metadata, scripts, and dependencies.
-  - Scripts include `lint`, `lint:fix`, `build`, `start`, and `dist`.
+- **.vscode/**: Contains Visual Studio Code configurations for debugging.
+  - `launch.json`: Configuration for attaching to a Model-Driven App in Edge.
 
 - **src/**: Source directory for TypeScript files.
   - `Forms/`: Contains example TypeScript files for forms.
@@ -23,9 +18,16 @@ This project serves as a template for developers to quickly set up a TypeScript-
 
 - **tsconfig.json**: TypeScript configuration file.
 
+- **package.json**: Defines project metadata, scripts, and dependencies.
+  - Scripts include `lint`, `lint:fix`, `build`, `start`, and `dist`.
+
+- **eslint.config.mjs**: Configuration for ESLint, including TypeScript and React plugins.
+
 - **webpack.common.js**: Common Webpack configuration.
 - **webpack.dev.js**: Webpack configuration for development.
 - **webpack.prod.js**: Webpack configuration for production.
+
+- **jest.config.js**: Configuration file for Jest, specifying the testing environment and preset for TypeScript.
 
 ## Setup Instructions
 
@@ -33,30 +35,43 @@ This project serves as a template for developers to quickly set up a TypeScript-
   ```sh
    git clone https://github.com/chrriedel/ts-webresource-template.git
    cd <project-folder>
+   ```
 
 2. **Install dependencies**:
     ```sh
     npm install
+    ```
 
-3.**Start the npm with --watch for dev inline debugging purpose**:
+3. **Start the npm with --watch for dev inline debugging purpose**:
     ```sh
     npm start
+    ```
 
-4.**Build the project for testing and debugging purpose**:
+4. **Build the project for testing and debugging purpose**:
     ```sh
     npm run-script build
+    ```
 
-5.**Build the code for production use** (creates a minified .js file):
+5. **Build the code for production use** (creates a minified .js file):
     ```sh
     npm run-script dist
+    ```
 
 6. **Lint the code**:
    ```sh
    npm run lint
+   ```
 
 7. **Fix linting issues**:
    ```sh
    npm run lint:fix
+   ```
+
+8. **Run Unit Tests**:
+   If you have enabled Jest for unit testing, you can run the tests using:
+   ```sh
+   npm test
+   ```
 
 ## Development Workflow
 
@@ -64,6 +79,41 @@ This project serves as a template for developers to quickly set up a TypeScript-
 - **Formatting**: Prettier is used for code formatting. The configuration is defined in `.prettierrc.json`.
 - **Building**: Webpack is used to bundle the project. Use `npm run build` for development builds and `npm run dist` for production builds.
 - **Debugging**: Use the configuration in `.vscode/launch.json` to attach to a Model-Driven App in Edge for debugging.
+
+## Testing with Jest
+
+Jest is a delightful JavaScript testing framework with a focus on simplicity. It works with projects using Babel, TypeScript, Node.js, React, Angular, Vue.js, and Svelte.
+
+### Setting Up Jest
+
+If you chose to include Jest during the initialization, the setup script will have already configured Jest for you. This includes installing the necessary packages, creating a Jest configuration file (`jest.config.js`), and adding a sample test file.
+
+### Running Tests
+
+To run your tests, use the following command:
+
+```sh
+npm test
+```
+
+This will execute all test files that match the pattern `*.test.ts` or `*.spec.ts` in your project.
+
+### Writing Tests
+
+Tests are written in files with the `.test.ts` or `.spec.ts` extension. Here is an example of a simple test:
+
+```typescript
+// src/Forms/exampleMyNameSpace.test.ts
+import { exampleFunction } from './exampleMyNameSpace';
+
+test('exampleFunction returns true', () => {
+  expect(exampleFunction()).toBe(true);
+});
+```
+
+### Debugging Tests
+
+You can debug your tests using Visual Studio Code. The `launch.json` file includes a configuration for debugging Jest tests. To start debugging, open the test file you want to debug, set breakpoints, and run the "Debug Jest Tests" configuration from the Debug panel.
 
 # Initialization Script
 
@@ -168,7 +218,5 @@ The script performs the following tasks to set up the project:
 To run the script, use the following command in your terminal:
 
 ```sh
-[init-project.sh]
-
-
-
+./initScirpt/init-project.sh
+```
