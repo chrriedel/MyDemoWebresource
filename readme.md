@@ -19,7 +19,7 @@ They start with
 ```sh
 code --install-extension
 ```
-and remove the .vscode folder from the root folder
+and remove the .vscode folder from the root folder after the script has finished
 
 ## Script Details
 
