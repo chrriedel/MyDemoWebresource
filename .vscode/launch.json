@@ -11,7 +11,7 @@
             "type": "msedge",
             "webRoot": "${workspaceFolder}",
             "timeout": 30000,
-            "url": "<Your Model-Driven App URL including AppId>*",
+            "url": "<test>*",
         }
     ]
 }
