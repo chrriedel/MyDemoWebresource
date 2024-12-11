@@ -7,5 +7,5 @@ describe("formOnLoad", () => {
     XrmMockGenerator.initialise();
     XrmMockGenerator.context.userSettings.userName = "TestUser";
   });
-// Your test goes here!!!
+  // Your test goes here!!!
 });
