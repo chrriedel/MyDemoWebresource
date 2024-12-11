@@ -18,7 +18,7 @@ module.exports = {
     path: path.resolve(__dirname, "dist"),
     filename: "ClientLibrary.js",
     // Set this to your namespace e.g. nC_ClientLibrary
-    library: ["Clientlibrary"],
+    library: ["ClientLibrary"],
     libraryTarget: "var",
   },
 };
