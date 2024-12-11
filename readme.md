@@ -12,6 +12,15 @@ The `init-project.sh` script is an interactive setup script designed to help you
 
 The script just needs VSCode installed :-)
 
+### use a different IDE
+
+If you want to use another IDE, you just could remove the part installing VSCode extensions. 
+They start with
+```sh
+code --install-extension
+```
+and remove the .vscode folder from the root folder
+
 ## Script Details
 
 ### User Prompts
