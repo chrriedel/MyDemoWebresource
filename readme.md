@@ -239,3 +239,7 @@ test('exampleFunction returns true', () => {
 ### Debugging Tests
 
 You can debug your tests using Visual Studio Code. The `launch.json` file includes a configuration for debugging Jest tests. To start debugging, open the test file you want to debug, set breakpoints, and run the "Debug Jest Tests" configuration from the Debug panel.
+
+## credits for insperation and or support
+@ScottDurow
+for inspiring me to try new things and to create this repo
