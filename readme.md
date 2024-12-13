@@ -21,6 +21,12 @@ code --install-extension
 ```
 and remove the .vscode folder from the root folder after the script has finished
 
+### Handling Existing Project Directory
+
+The script includes a check to see if the specified project directory already exists. If the directory exists, the script will switch to that directory. If the directory does not exist, the script will create it and then switch to it.
+
+This ensures that the script can be run multiple times without causing errors due to the directory already existing. It also allows you to add features like testing and continue working in an existing project directory if needed. 
+
 ## Script Details
 
 ### User Prompts
@@ -116,7 +122,7 @@ The script performs the following tasks to set up the project:
 To run the script, use the following command in your terminal:
 
 ```sh
-./initScirpt/init-project.sh
+./initScript/init-project.sh
 ```
 
 #The next section explains the structure and content of the newly created project. 
@@ -125,7 +131,7 @@ To run the script, use the following command in your terminal:
 
 ### Key Files and Directories
 
-- **initScirpt/**: Contains the initialization script to set up the project.
+- **initScript/**: Contains the initialization script to set up the project.
   - `init-project.sh`: Script to initialize the project, install dependencies, and set up configurations.
 
 - **.vscode/**: Contains Visual Studio Code configurations for debugging.
