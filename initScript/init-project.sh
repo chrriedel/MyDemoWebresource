@@ -93,7 +93,12 @@ code --install-extension ms-edgedevtools.vscode-edge-devtools --force
 
 # creating folder structure
 # Create a project directory and navigate into it
-mkdir $projectFolderName && cd $projectFolderName
+if [ -d "$projectFolderName" ]; then
+  echo "Directory $projectFolderName already exists. Switching to the directory."
+  cd $projectFolderName
+else
+  mkdir $projectFolderName && cd $projectFolderName
+fi
 
 # Create .gitingore file
 cat > .gitignore <<EOL
