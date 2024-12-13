@@ -243,5 +243,5 @@ You can debug your tests using Visual Studio Code. The `launch.json` file includ
 
 ### Kudos
 
-[@ScottDurow][https://github.com/scottdurow]
+[@ScottDurow](https://github.com/scottdurow) 
 for inspiring me to try new things and to create this repo
