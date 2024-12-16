@@ -108,7 +108,12 @@ code --install-extension ms-edgedevtools.vscode-edge-devtools --force
 
 # creating folder structure
 # Create a project directory and navigate into it
+if [ -d "$projectFolderName" ]; then
+  echo "Directory $projectFolderName already exists. Switching to the directory."
+  cd $projectFolderName
+else
 mkdir $projectFolderName && cd $projectFolderName
+fi
 
 # Create .gitingore file
 cat >.gitignore <<EOL
@@ -127,7 +132,7 @@ mkdir .vscode
 # Initialize a Node.js project
 npm init -y
 
-# Install the required TypeScript definitions for Power Platform
+# Install the required Type definitions for Power Platform
 npm install --save-dev @types/xrm
 npm install --save-dev @types/node
 
