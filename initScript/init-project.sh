@@ -22,29 +22,21 @@ read outputFileName
 echo "Do you want to add typescript to the project?"
 echo "If you choose no, the project will be setup for javascript."
 echo "Enter 'y' for true, or 'n' for false: "
-read varInputTypeScript
+read varTypeScript
 
-# Prompt the user for eslint
-echo "Do you want to add eslint to the project?"
-echo "Enter 'y' for true, or 'n' for false: "
-read varInputEsLint
-
-# Set the boolean variable (varTypeScript) based on varInputTypeScript
-if [ "$varInputTypeScript" = "y" ]; then
-  varTypeScript=1 # True
-elif [ "$varInputTypeScript" = "n" ]; then
-  varTypeScript=0 # False
-else
+# Set the variable varTypeScript based on the user input
+if [ "$varTypeScript" != "y" ] && [ "$varTypeScript" != "n" ]; then
   echo "Invalid input. Please enter 'y' or 'n'."
   exit 1
 fi
 
-# Set the boolean variable (varesLint) based on varInputEsLint
-if [ "$varInputEsLint" = "y" ]; then
-  varesLint=1 # True
-elif [ "$varInputEsLint" = "n" ]; then
-  varesLint=0 # False
-else
+# Prompt the user for eslint
+echo "Do you want to add eslint to the project?"
+echo "Enter 'y' for true, or 'n' for false: "
+read varEsLint
+
+# Set the variable varesLint based on the user input
+if [ "$varEsLint" != "y" ] && [ "$varEsLint" != "n" ]; then
   echo "Invalid input. Please enter 'y' or 'n'."
   exit 1
 fi
@@ -52,14 +44,10 @@ fi
 # Prompt the user for prettier
 echo "Do you want to add prettier to the project?"
 echo "Enter 'y' for true, or 'n' for false: "
-read varInputPrettier
+read varPrettier
 
-# Set the boolean variable (varPrettier) based on varInputPrettier
-if [ "$varInputPrettier" = "y" ]; then
-  varPrettier=1 # True
-elif [ "$varInputPrettier" = "n" ]; then
-  varPrettier=0 # False
-else
+# Set the variable varPrettier based on the user input
+if [ "$varPrettier" != "y" ] && [ "$varPrettier" = "n" ]; then
   echo "Invalid input. Please enter 'y' or 'n'."
   exit 1
 fi
@@ -67,14 +55,10 @@ fi
 # Prompt the user for vscode exstension
 echo "Do you want to add unit testing to your project?"
 echo "Enter 'y' for true, or 'n' for false: "
-read varInputJest
+read varJest
 
-# Set the boolean variable (varPrettier) based on varInputPrettier
-if [ "$varInputJest" = "y" ]; then
-  varJest=1 # True
-elif [ "$varInputJest" = "n" ]; then
-  varJest=0 # False
-else
+# Set the variable varJest based on the user input
+if [ "$varJest" != "y" ] && [ "$varJest" = "n" ]; then
   echo "Invalid input. Please enter 'y' or 'n'."
   exit 1
 fi
@@ -112,7 +96,7 @@ if [ -d "$projectFolderName" ]; then
   echo "Directory $projectFolderName already exists. Switching to the directory."
   cd $projectFolderName
 else
-mkdir $projectFolderName && cd $projectFolderName
+  mkdir $projectFolderName && cd $projectFolderName
 fi
 
 # Create .gitingore file
@@ -137,7 +121,7 @@ npm install --save-dev @types/xrm
 npm install --save-dev @types/node
 
 # Check if typescript should be added to the project
-if [ "$varTypeScript" -eq 1 ]; then
+if [ "$varTypeScript" = "y" ]; then
   echo "Setting up TypeScript for the project"
   # Install typescript to the project
   npm install typescript --save-dev
@@ -253,10 +237,10 @@ sed -i '' '/"scripts": {/,/},/c\
 ' package.json
 
 # Check if eslint should be setup
-if [ "$varesLint" -eq 1 ]; then
+if [ "$varesLint" = "y" ]; then
   echo "Setting up eslint for the project"
 
-  if [ "$varTypeScript" -eq 1 ]; then
+  if [ "$varTypeScript" = "y" ]; then
 
     cat >eslint.config.mjs <<EOL
 import flatLinter from "@typescript-eslint/eslint-plugin";
@@ -357,7 +341,7 @@ else
 fi
 
 # setup prettier prefered config
-if [ "$varPrettier" -eq 1 ]; then
+if [ "$varPrettier" = "y" ]; then
 
   echo "Setting up Prettier config"
   cat >.prettierrc.json <<EOL
@@ -381,7 +365,7 @@ else
 fi
 
 # add jest
-if [ "$varJest" -eq 1 ]; then
+if [ "$varJest" = "y" ]; then
   # install jest
   npm install jest ts-jest xrm-mock @types/jest --save-dev
 
@@ -433,7 +417,7 @@ EOL
   # add test directory
   mkdir src/Forms/__tests__
 
-  if [ "$varTypeScript" -eq 1 ]; then
+  if [ "$varTypeScript" = "y" ]; then
     cat >src/Forms/__tests__/unit.exampleMyNameSpace.test.ts <<EOL
 import { MyNameSpace } from "../exampleMyNameSpace";
 import { XrmMockGenerator } from "xrm-mock";
@@ -476,7 +460,7 @@ else
 fi
 
 # Create a sample TypeScript file with a reference to the Xrm namespace
-if [ "$varTypeScript" -eq 1 ]; then
+if [ "$varTypeScript" = "y" ]; then
   cat >src/Forms/exampleMyNameSpace.ts <<EOL
 export class MyNameSpace {
   // Define some global variables
