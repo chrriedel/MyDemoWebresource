@@ -18,20 +18,35 @@ read nameSpace
 echo "Enter your outputFile name (including file extension (.js)):"
 read outputFileName
 
+# ask if typescript should be added, if not config will be created fo javascript
+echo "Do you want to add typescript to the project?"
+echo "If you choose no, the project will be setup for javascript."
+echo "Enter 'y' for true, or 'n' for false: "
+read varInputTypeScript
+
 # Prompt the user for eslint
 echo "Do you want to add eslint to the project?"
 echo "Enter 'y' for true, or 'n' for false: "
 read varInputEsLint
 
+# Set the boolean variable (varTypeScript) based on varInputTypeScript
+if [ "$varInputTypeScript" = "y" ]; then
+  varTypeScript=1 # True
+elif [ "$varInputTypeScript" = "n" ]; then
+  varTypeScript=0 # False
+else
+  echo "Invalid input. Please enter 'y' or 'n'."
+  exit 1
+fi
 
 # Set the boolean variable (varesLint) based on varInputEsLint
 if [ "$varInputEsLint" = "y" ]; then
-    varesLint=1  # True
+  varesLint=1 # True
 elif [ "$varInputEsLint" = "n" ]; then
-    varesLint=0  # False
+  varesLint=0 # False
 else
-    echo "Invalid input. Please enter 'y' or 'n'."
-    exit 1
+  echo "Invalid input. Please enter 'y' or 'n'."
+  exit 1
 fi
 
 # Prompt the user for prettier
@@ -41,12 +56,12 @@ read varInputPrettier
 
 # Set the boolean variable (varPrettier) based on varInputPrettier
 if [ "$varInputPrettier" = "y" ]; then
-    varPrettier=1  # True
+  varPrettier=1 # True
 elif [ "$varInputPrettier" = "n" ]; then
-    varPrettier=0  # False
+  varPrettier=0 # False
 else
-    echo "Invalid input. Please enter 'y' or 'n'."
-    exit 1
+  echo "Invalid input. Please enter 'y' or 'n'."
+  exit 1
 fi
 
 # Prompt the user for vscode exstension
@@ -56,32 +71,32 @@ read varInputJest
 
 # Set the boolean variable (varPrettier) based on varInputPrettier
 if [ "$varInputJest" = "y" ]; then
-    varJest=1  # True
+  varJest=1 # True
 elif [ "$varInputJest" = "n" ]; then
-    varJest=0  # False
+  varJest=0 # False
 else
-    echo "Invalid input. Please enter 'y' or 'n'."
-    exit 1
+  echo "Invalid input. Please enter 'y' or 'n'."
+  exit 1
 fi
 
-# Install prerequisites 
+# Install prerequisites
 # Check if Homebrew is installed
 echo "Installing homebrew..."
 if ! command -v brew >/dev/null 2>&1; then
-    echo "Homebrew is not installed. Installing it now..."
-    # Install Homebrew
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  echo "Homebrew is not installed. Installing it now..."
+  # Install Homebrew
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 else
-    echo "Homebrew is already installed."
+  echo "Homebrew is already installed."
 fi
 
 echo "Installing node js"
 # check if node js is installed if not install using brew
 if ! command -v node >/dev/null 2>&1; then
-    echo "Node.js is not installed. Installing it now using Homebrew..."
-    brew install node
+  echo "Node.js is not installed. Installing it now using Homebrew..."
+  brew install node
 else
-    echo "Node.js is already installed. Skipping installation!"
+  echo "Node.js is already installed. Skipping installation!"
 fi
 
 # Install recommended VS Code extensions using the VS Code command line (optional; requires VS Code CLI)
@@ -96,7 +111,7 @@ code --install-extension ms-edgedevtools.vscode-edge-devtools --force
 mkdir $projectFolderName && cd $projectFolderName
 
 # Create .gitingore file
-cat > .gitignore <<EOL
+cat >.gitignore <<EOL
 node_modules
 dist
 .vscode
@@ -116,12 +131,14 @@ npm init -y
 npm install --save-dev @types/xrm
 npm install --save-dev @types/node
 
-# Install typescript to the project
-npm install typescript --save-dev
-npx tsc -init
-
-# Create a basic TypeScript configuration file
-cat > tsconfig.json <<EOL
+# Check if typescript should be added to the project
+if [ "$varTypeScript" -eq 1 ]; then
+  echo "Setting up TypeScript for the project"
+  # Install typescript to the project
+  npm install typescript --save-dev
+  npx tsc -init
+  # Create a basic TypeScript configuration file
+  cat >tsconfig.json <<EOL
 {
    "compilerOptions": {
     "target": "ES6",
@@ -142,9 +159,14 @@ cat > tsconfig.json <<EOL
   }
 }
 EOL
+  varIndexFile="index.ts"
+else
+  echo "Setting up JavaScript for the project"
+  varIndexFile="index.js"
+fi
 
 # Create launch json
-cat > .vscode/launch.json <<EOL 
+cat >.vscode/launch.json <<EOL
 {
     // Use IntelliSense to learn about possible attributes.
     // Hover to view descriptions of existing attributes.
@@ -171,11 +193,11 @@ npm install webpack webpack-cli webpack-merge ts-loader --save-dev
 #create webpack config files
 #create common config
 echo "creating config files..."
-cat > webpack.common.js <<EOL 
+cat >webpack.common.js <<EOL
 const path = require("path");
 
 module.exports = {
-  entry: "./src/index.ts",
+  entry: "./src/$varIndexFile",
   module: {
     rules: [
       {
@@ -198,7 +220,7 @@ module.exports = {
 };
 EOL
 # create dev config
-cat > webpack.dev.js <<EOL 
+cat >webpack.dev.js <<EOL
 const { merge } = require("webpack-merge");
 const common = require("./webpack.common.js");
 module.exports = merge(common, {
@@ -207,7 +229,7 @@ module.exports = merge(common, {
 });
 EOL
 # Create prod config
-cat > webpack.prod.js <<EOL 
+cat >webpack.prod.js <<EOL
 const { merge } = require("webpack-merge");
 const common = require("./webpack.common.js");
 module.exports = merge(common, {
@@ -227,9 +249,11 @@ sed -i '' '/"scripts": {/,/},/c\
 
 # Check if eslint should be setup
 if [ "$varesLint" -eq 1 ]; then
-    echo "Setting up eslint for the project"
+  echo "Setting up eslint for the project"
 
-cat > eslint.config.mjs <<EOL 
+  if [ "$varTypeScript" -eq 1 ]; then
+
+    cat >eslint.config.mjs <<EOL
 import flatLinter from "@typescript-eslint/eslint-plugin";
 import typescriptParser from "@typescript-eslint/parser";
 import prettier from "eslint-plugin-prettier";
@@ -267,27 +291,71 @@ export default [
   },
 ];
 EOL
-#install eslint node modules
-npm install --save-dev eslint @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-plugin-react eslint-config-prettier eslint-plugin-prettier
 
-# Add lint scripts to the scripts section in package.json
-sed -i '' '/"scripts": {/a\
+  else
+    cat >eslint.config.mjs <<EOL
+import flatLinter from "@typescript-eslint/eslint-plugin";
+import typescriptParser from "@typescript-eslint/parser";
+import prettier from "eslint-plugin-prettier";
+import react from "eslint-plugin-react";
+
+export default [
+  {
+    files: ["**/*.{ts,tsx,js,jsx}"],
+    languageOptions: {
+      parser: typescriptParser,
+      parserOptions: {
+       ecmaVersion: 5, // Specify ECMAScript version
+       sourceType: "module",
+        ecmaFeatures: {
+          jsx: true, // Enable JSX
+        },
+      },
+    },
+    settings: {
+      react: {
+        pragma: "React",
+        version: "detect",
+      },
+    },
+    plugins: {
+      "@typescript-eslint": flatLinter,
+      prettier,
+      react,
+    },
+    rules: {
+      "prettier/prettier": "error",
+    },
+  },
+  {
+    files: ["*.ts"],
+    rules: {
+      camelcase: [2, { properties: "never" }],
+    },
+  },
+];
+EOL
+  fi
+  #install eslint node modules
+  npm install --save-dev eslint @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-plugin-react eslint-config-prettier eslint-plugin-prettier
+
+  # Add lint scripts to the scripts section in package.json
+  sed -i '' '/"scripts": {/a\
     "lint": "eslint src",\
     "lint:fix": "npm run lint -- --fix",
 ' package.json
 
-#install vscode extension for eslint
-code --install-extension dbaeumer.vscode-eslint --force
+  #install vscode extension for eslint
+  code --install-extension dbaeumer.vscode-eslint --force
 else
-    echo "Setting up eslint skipped!"
+  echo "Setting up eslint skipped!"
 fi
-
 
 # setup prettier prefered config
 if [ "$varPrettier" -eq 1 ]; then
 
-echo "Setting up Prettier config"
-cat > .prettierrc.json <<EOL
+  echo "Setting up Prettier config"
+  cat >.prettierrc.json <<EOL
 {
     "semi": true,
     "trailingComma": "all",
@@ -297,36 +365,40 @@ cat > .prettierrc.json <<EOL
     "endOfLine":"auto"
   }
 EOL
-# install prettier node modules
-npm install --save-dev --save-exact prettier
+  # install prettier node modules
+  npm install --save-dev --save-exact prettier
 
-# install vscode extension for prettier
-code --install-extension esbenp.prettier-vscode --force
+  # install vscode extension for prettier
+  code --install-extension esbenp.prettier-vscode --force
 
 else
-    echo "Setting up prettier skipped!"
+  echo "Setting up prettier skipped!"
 fi
 
 # add jest
-if [ "$varJest" -eq 1 ]; then 
-# install jest
-npm install jest ts-jest xrm-mock @types/jest --save-dev
+if [ "$varJest" -eq 1 ]; then
+  # install jest
+  npm install jest ts-jest xrm-mock @types/jest --save-dev
 
-cat > jest.config.js <<EOL
+  cat >jest.config.js <<EOL
 module.exports = {
   preset: "ts-jest",
   testEnvironment: "node",
+  transform: {
+    "^.+\\.[tj]sx?$": "ts-jest", // Transform both .ts/.tsx and .js/.jsx files using ts-jest
+  },
+  moduleFileExtensions: ["ts", "tsx", "js", "jsx"], // Recognize both TypeScript and JavaScript files
 };
 EOL
 
-# add test to package.json
-sed -i '' '/"test":/s/".*"/"test": "jest"/' package.json
+  # add test to package.json
+  sed -i '' '/"test":/s/".*"/"test": "jest"/' package.json
 
-# add launch config to debug unit tests
+  # add launch config to debug unit tests
 
-# Add Jest configuration to launch.json
-cd .vscode
-sed -i '' '/"configurations": \[/a\
+  # Add Jest configuration to launch.json
+  cd .vscode
+  sed -i '' '/"configurations": \[/a\
 \        {\
 \            "type": "node",\
 \            "name": "vscode-jest-tests",\
@@ -351,13 +423,14 @@ sed -i '' '/"configurations": \[/a\
 \            ]\
 \        },  
 ' launch.json
-cd ..
+  cd ..
 
-# add test directory
-mkdir src/Forms/__tests__
+  # add test directory
+  mkdir src/Forms/__tests__
 
-cat > src/Forms/__tests__/unit.exampleMyNameSpace.test.ts <<EOL
-import { formOnLoad } from "../exampleMyNameSpace";
+  if [ "$varTypeScript" -eq 1 ]; then
+    cat >src/Forms/__tests__/unit.exampleMyNameSpace.test.ts <<EOL
+import { MyNameSpace } from "../exampleMyNameSpace";
 import { XrmMockGenerator } from "xrm-mock";
 
 describe("formOnLoad", () => {
@@ -366,16 +439,40 @@ describe("formOnLoad", () => {
     XrmMockGenerator.initialise();
     XrmMockGenerator.context.userSettings.userName = "TestUser";
   });
-// Your test goes here!!!
+  // Your test goes here!!!
+  it("should check if true is true", () => {
+    expect(true).toBe(true);
+  });
 });
+
 EOL
 
-else 
- echo "skipped adding unit tests"
+  else
+    cat >src/Forms/__tests__/unit.exampleMyNameSpace.test.js <<EOL
+//import { formOnLoad } from "../exampleMyNameSpace";
+//import { XrmMockGenerator } from "xrm-mock";
+
+describe("formOnLoad", () => {
+  /*beforeEach(() => {
+    // Initialize the mock Xrm environment
+    XrmMockGenerator.initialise();
+    XrmMockGenerator.context.userSettings.userName = "TestUser";
+  });*/
+  // Your test goes here!!!
+  it("should check if true is true", () => {
+    expect(true).toBe(true);
+  });
+});
+
+EOL
+  fi
+else
+  echo "skipped adding unit tests"
 fi
 
 # Create a sample TypeScript file with a reference to the Xrm namespace
-cat > src/Forms/exampleMyNameSpace.ts <<EOL
+if [ "$varTypeScript" -eq 1 ]; then
+  cat >src/Forms/exampleMyNameSpace.ts <<EOL
 export class MyNameSpace {
   // Define some global variables
   private static readonly myUniqueId: string = "_myUniqueId"; // Define an ID for the notification
@@ -400,12 +497,48 @@ export class MyNameSpace {
 }
 EOL
 
-cat > src/index.ts <<EOL
+  cat >src/index.ts <<EOL
 export * from "./Forms/exampleMyNameSpace";
 EOL
 
-# Open the project in Visual Studio Code
-code . ./src/Forms/exampleMyNameSpace.ts
+  # Open the project in Visual Studio Code
+  code . ./src/Forms/exampleMyNameSpace.ts
+
+else
+  cat >src/Forms/exampleMyNameSpace.js <<EOL
+var MyNameSpace = (function () {
+  // Define some global variables
+  var myUniqueId = "_myUniqueId"; // Define an ID for the notification
+  var currentUserName = Xrm.Utility.getGlobalContext().userSettings.userName; // Get current user name
+  var message = currentUserName + ": Your JavaScript code in action!";
+
+  return {
+    /**
+     * Function to run in the form OnLoad event
+     * @param {Xrm.Events.EventContext} executionContext - The execution context passed from Dynamics 365
+     */
+    formOnLoad: function (executionContext) {
+      var formContext = executionContext.getFormContext();
+
+      // Display the form level notification as an INFO
+      formContext.ui.setFormNotification(message, "INFO", myUniqueId);
+
+      // Wait for 5 seconds before clearing the notification
+      window.setTimeout(function () {
+        formContext.ui.clearFormNotification(myUniqueId);
+      }, 5000);
+    },
+  };
+})();
+EOL
+
+  cat >src/index.js <<EOL
+export * from "./Forms/exampleMyNameSpace.js";
+EOL
+
+  # Open the project in Visual Studio Code
+  code . ./src/Forms/exampleMyNameSpace.js
+fi
 
 # Modified echo statements with color
 echo -e "${YELLOW}Make sure to add your URL to the launch.json file${NC}"
