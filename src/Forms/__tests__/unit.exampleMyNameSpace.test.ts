@@ -1,4 +1,4 @@
-import { formOnLoad } from "../exampleMyNameSpace";
+import { MyNameSpace } from "../exampleMyNameSpace";
 import { XrmMockGenerator } from "xrm-mock";
 
 describe("formOnLoad", () => {
@@ -8,4 +8,7 @@ describe("formOnLoad", () => {
     XrmMockGenerator.context.userSettings.userName = "TestUser";
   });
   // Your test goes here!!!
+  it("should check if true is true", () => {
+    expect(true).toBe(true);
+  });
 });
