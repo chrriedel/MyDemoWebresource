@@ -152,13 +152,13 @@ To run the script, use the following command in your terminal:
 ./initScript/init-project.sh
 ```
 
-# The next section explains the structure and content of the newly created project.
+# The next section explains the structure and content of this project and the example JavaScript and TypeScript project folders.
 
 ## Folder Structure
 
 ### Key Files and Directories
 
-- **initScript/**: Contains the initialization script to set up the project.
+- **initScript/**: Contains the initialization script to set up a new project.
 
   - `init-project.sh`: Script to initialize the project, install dependencies, and set up configurations.
 
