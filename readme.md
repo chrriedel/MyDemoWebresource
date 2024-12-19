@@ -20,8 +20,6 @@ If you want to use another IDE, you can remove the part installing VSCode extens
 code --install-extension
 ```
 
-1
-
 and remove the `.vscode` folder from the root folder after the script has finished.
 
 ### Handling Existing Project Directory
@@ -100,7 +98,7 @@ The script performs the following tasks to set up the project:
    - Creates a `.gitignore` file.
 
 5. **Install TypeScript**
-   (if enabled, if not it will use JavaScript as language and also add .js example files indstead fo .ts files):
+   (if enabled, if not it will use JavaScript as language and also add .js example files instead of .ts files):
 
    - Installs TypeScript.
    - Creates a basic TypeScript configuration file (`tsconfig.json`).
@@ -164,28 +162,36 @@ To run the script, use the following command in your terminal:
 
   - `init-project.sh`: Script to initialize the project, install dependencies, and set up configurations.
 
-- **.vscode/**: Contains Visual Studio Code configurations for debugging.
+- **JavaScript Example/**: Contains the JavaScript example project.
 
-  - `launch.json`: Configuration for attaching to a Model-Driven App in Edge.
+  - `.vscode/`: Contains Visual Studio Code configurations for debugging.
+    - `launch.json`: Configuration for attaching to a Model-Driven App in Edge.
+  - `src/`: Source directory for JavaScript files.
+    - `Forms/`: Contains example JavaScript files for forms.
+    - `index.js`: Entry point for the application.
+  - `webpack.common.js`: Common Webpack configuration.
+  - `webpack.dev.js`: Webpack configuration for development.
+  - `webpack.prod.js`: Webpack configuration for production.
+  - `jest.config.js`: Configuration file for Jest, specifying the testing environment and preset for JavaScript.
+  - `package.json`: Defines project metadata, scripts, and dependencies.
+  - `.prettierrc.json`: Configuration for Prettier.
+  - `.gitignore`: Specifies files and directories to be ignored by Git.
 
-- **src/**: Source directory for TypeScript files.
+- **TypeScript Example/**: Contains the TypeScript example project.
 
-  - `Forms/`: Contains example TypeScript files for forms.
-  - `index.ts`: Entry point for the application.
-
-- **tsconfig.json**: TypeScript configuration file.
-
-- **package.json**: Defines project metadata, scripts, and dependencies.
-
-  - Scripts include `lint`, `lint:fix`, `build`, `start`, and `dist`.
-
-- **eslint.config.mjs**: Configuration for ESLint, including TypeScript and React plugins.
-
-- **webpack.common.js**: Common Webpack configuration.
-- **webpack.dev.js**: Webpack configuration for development.
-- **webpack.prod.js**: Webpack configuration for production.
-
-- **jest.config.js**: Configuration file for Jest, specifying the testing environment and preset for TypeScript.
+  - `.vscode/`: Contains Visual Studio Code configurations for debugging.
+    - `launch.json`: Configuration for attaching to a Model-Driven App in Edge.
+  - `src/`: Source directory for TypeScript files.
+    - `Forms/`: Contains example TypeScript files for forms.
+    - `index.ts`: Entry point for the application.
+  - `tsconfig.json`: TypeScript configuration file.
+  - `webpack.common.js`: Common Webpack configuration.
+  - `webpack.dev.js`: Webpack configuration for development.
+  - `webpack.prod.js`: Webpack configuration for production.
+  - `jest.config.js`: Configuration file for Jest, specifying the testing environment and preset for TypeScript.
+  - `package.json`: Defines project metadata, scripts, and dependencies.
+  - `.prettierrc.json`: Configuration for Prettier.
+  - `.gitignore`: Specifies files and directories to be ignored by Git.
 
 ## Setup Instructions Not Using the Script
 
